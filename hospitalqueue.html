@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hospital Queue Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #d0f2f4 0%, #ffffff 100%);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .header {
+      background: #07689f;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      letter-spacing: 2px;
+      font-size: 2rem;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      background: #40a8c4;
+      padding: 0.8rem;
+      position: relative;
+    }
+    .navbar img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      padding: 4px;
+      box-shadow: 0 2px 6px #b1cbe1;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .navbar button {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .navbar button:hover {
+      color: #f7fafc;
+      text-decoration: underline;
+    }
+    .container {
+      margin: 2rem auto;
+      max-width: 900px;
+      min-height: 430px;
+      position: relative;
+    }
+    .card {
+      background: #f7fafc;
+      box-shadow: 0 2px 12px #e3eef0;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .hidden {
+      display: none;
+    }
+    input,
+    button {
+      border: 1px solid #b1cbe1;
+      border-radius: 8px;
+      padding: 0.6rem;
+      margin: 0.3rem 0;
+      width: 100%;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    button {
+      background: #40a8c4;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #07689f;
+    }
+    ul {
+      margin: 0.5rem 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.9rem;
+    }
+    li {
+      background: #e6f2fb;
+      margin: 0.2rem 0;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+    .status-bar {
+      background: #beddf4;
+      border-radius: 8px;
+      padding: 0.5rem;
+      text-align: center;
+      margin: 0.5rem 0;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    h3 {
+      margin-top: 0;
+    }
+    #home {
+      position: relative;
+      overflow: hidden;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 12px;
+      height: 350px;
+      padding: 0;
+    }
+    #image-slider {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    .slide-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .slide-image.active {
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+    #specialties {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto 10px auto;
+      max-width: 450px;
+    }
+    .specialty {
+      background: #40a8c4;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      flex: 1;
+    }
+    #doctors-info {
+      max-width: 450px;
+      margin: 10px auto 0 auto;
+      color: #333;
+      font-size: 1rem;
+    }
+    #doctors-info h3 {
+      color: #07689f;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #doctors-info ul {
+      padding: 0;
+      list-style: none;
+    }
+    #doctors-info ul li {
+      margin-bottom: 6px;
+    }
+    .doctor-containers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .doctor-box {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #d0dfe6;
+      text-align: center;
+    }
+    .doctor-box h4 {
+      margin-top: 0;
+      color: #07689f;
+      font-size: 1rem;
+    }
+    .break-status {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Hospital Queue Management System</div>
+  <div class="navbar">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png"
+      alt="Hospital Logo"
+    />
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('reception')">Reception Login</button>
+    <button onclick="showSection('doctor')">Doctor</button>
+    <button onclick="showSection('public')">Patient Login</button>
+    <button onclick="showSection('queue')">Queue Check</button>
+  </div>
+  <div class="container">
+    <!-- Homepage Content -->
+    <div id="home" class="card">
+      <div id="image-slider">
+        <img
+          src="images-1.jpeg"
+          class="slide-image active"
+          alt="Hospital Image 1"
+        />
+        <img
+          src="https://images.unsplash.com/photo-1519494026892-80bbd5a70d37?auto=format&fit=crop&w=800&q=80"
+          class="slide-image"
+          alt="Hospital Image 2"
+        />
+        <img
+          src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=800&q=80"
+          class="slide-image"
+          alt="Hospital Image 3"
+        />
+      </div>
+    </div>
+    <div id="specialties">
+      <div class="specialty">24/7 Emergency</div>
+      <div class="specialty">Specialized Doctors</div>
+      <div class="specialty">Advanced Equipment</div>
+    </div>
+    <div id="doctors-info">
+      <h3>Our Doctors & Availability</h3>
+      <ul>
+        <li>
+          <strong>Dr. Alice Smith</strong> - Cardiologist - 9am to 5pm
+        </li>
+        <li><strong>Dr. John Doe</strong> - Neurologist - 10am to 6pm</li>
+        <li>
+          <strong>Dr. Emma Johnson</strong> - Pediatrician - 8am to 4pm
+        </li>
+        <li>
+          <strong>Dr. Michael Williams</strong> - Orthopedic - 11am to 7pm
+        </li>
+      </ul>
+    </div>
+
+    <!-- Reception Dashboard -->
+    <div id="reception" class="card hidden">
+      <div id="login-card">
+        <h3>Reception Login</h3>
+        <input id="user" placeholder="Username" />
+        <input id="pass" type="password" placeholder="Password" />
+        <button onclick="loginReception()">Login</button>
+        <div id="login-error" style="color: red; font-weight: bold"></div>
+      </div>
+      <div id="dashboard-card" class="hidden">
+        <h3>Reception Dashboard</h3>
+        <div class="doctor-containers"></div>
+        <button onclick="logoutReception()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Doctor Login & Dashboard -->
+    <div id="doctor" class="card hidden">
+      <div id="doctor-login">
+        <h3>Doctor Login</h3>
+        <input id="doctor-user" placeholder="Doctor Username" />
+        <input id="doctor-pass" type="password" placeholder="Password" />
+        <button onclick="loginDoctor()">Login</button>
+        <div id="doctor-login-error" style="color: red; font-weight: bold"></div>
+      </div>
+      <div id="doctor-dashboard" class="hidden">
+        <h3>Doctor's Live Queue</h3>
+        <div class="status-bar">
+          Now Serving: <span id="doctor-serving"></span>
+        </div>
+        <ul id="doctor-list"></ul>
+        <button onclick="logoutDoctor()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Patient/Public Section -->
+    <div id="public" class="card hidden">
+      <h3>Patient Login & Queue Info</h3>
+      <input id="myToken" placeholder="Enter Your Token (e.g. DRALICEP001)" />
+      <button onclick="showStatus()">Check Status</button>
+      <div id="info"></div>
+    </div>
+
+    <!-- Queue Check -->
+    <div id="queue" class="card hidden">
+      <h3>Now Serving: <span id="public-serving"></span></h3>
+    </div>
+  </div>
+
+  <script>
+    const doctors = [
+      { username: "dralice", password: "alice123", name: "Dr. Alice Smith" },
+      { username: "drjohn", password: "john123", name: "Dr. John Doe" },
+      { username: "dremma", password: "emma123", name: "Dr. Emma Johnson" },
+      { username: "drmichael", password: "michael123", name: "Dr. Michael Williams" },
+    ];
+    const validReceptionUser = { username: "reception", password: "pass123" };
+
+    let queues = {},
+      currentServing = {},
+      doctorStatus = {};
+    doctors.forEach((doc) => {
+      queues[doc.username] = [];
+      currentServing[doc.username] = 0;
+      doctorStatus[doc.username] = true;
+    });
+
+    let receptionLoggedIn = false,
+      loggedInDoctor = null;
+
+    function generateDoctorBoxes() {
+      const container = document.querySelector(".doctor-containers");
+      container.innerHTML = "";
+      doctors.forEach((doc) => {
+        container.innerHTML += `
+          <div class="doctor-box">
+            <h4>${doc.name}</h4>
+            <input id="pname-${doc.username}" placeholder="Patient Name" />
+            <input id="page-${doc.username}" type="number" placeholder="Age" />
+            <button onclick="addPatient('${doc.username}')">Add Patient</button>
+            <div class="status-bar">Now Serving: <span id="serving-${doc.username}"></span></div>
+            <button onclick="nextPatient('${doc.username}')">Next</button>
+            <button onclick="toggleBreak('${doc.username}')" id="break-${doc.username}">Stop Serving</button>
+            <div class="break-status" id="break-status-${doc.username}"></div>
+            <ul id="patients-list-${doc.username}"></ul>
+          </div>
+        `;
+      });
+    }
+
+    function loginReception() {
+      const user = document.getElementById("user").value.trim();
+      const pass = document.getElementById("pass").value.trim();
+      if (user === validReceptionUser.username && pass === validReceptionUser.password) {
+        receptionLoggedIn = true;
+        document.getElementById("login-error").textContent = "";
+        document.getElementById("login-card").classList.add("hidden");
+        document.getElementById("dashboard-card").classList.remove("hidden");
+        generateDoctorBoxes();
+        doctors.forEach((d) => renderQueue(d.username));
+      } else {
+        document.getElementById("login-error").textContent = "Invalid Username or Password";
+      }
+    }
+
+    function logoutReception() {
+      receptionLoggedIn = false;
+      document.getElementById("user").value = "";
+      document.getElementById("pass").value = "";
+      document.getElementById("dashboard-card").classList.add("hidden");
+      document.getElementById("login-card").classList.remove("hidden");
+    }
+
+    function addPatient(doctorId) {
+      if (!receptionLoggedIn) return alert("Please login first!");
+      const pname = document.getElementById("pname-" + doctorId).value.trim();
+      const page = document.getElementById("page-" + doctorId).value.trim();
+      if (!pname) return alert("Enter patient name");
+      const token = doctorId.toUpperCase() + "P" + String(queues[doctorId].length + 1).padStart(3, "0");
+      queues[doctorId].push({ name: pname, age: page, token });
+      document.getElementById("pname-" + doctorId).value = "";
+      document.getElementById("page-" + doctorId).value = "";
+      renderQueue(doctorId);
+    }
+
+    function nextPatient(doctorId) {
+      if (!receptionLoggedIn) return alert("Please login first!");
+      if (!doctorStatus[doctorId]) return alert("Doctor is on break!");
+      if (currentServing[doctorId] < queues[doctorId].length) currentServing[doctorId]++;
+      renderQueue(doctorId);
+    }
+
+    function toggleBreak(doctorId) {
+      doctorStatus[doctorId] = !doctorStatus[doctorId];
+      const btn = document.getElementById("break-" + doctorId);
+      const statusDiv = document.getElementById("break-status-" + doctorId);
+      if (!doctorStatus[doctorId]) {
+        btn.textContent = "Start Serving";
+        statusDiv.textContent = "Doctor is on Break";
+        statusDiv.style.color = "red";
+      } else {
+        btn.textContent = "Stop Serving";
+        statusDiv.textContent = "";
+      }
+      renderQueue(doctorId);
+    }
+
+    function renderQueue(doctorId) {
+      const servingEl = document.getElementById("serving-" + doctorId);
+      const listEl = document.getElementById("patients-list-" + doctorId);
+      if (!doctorStatus[doctorId]) {
+        servingEl.textContent = "On Break";
+        listEl.innerHTML = '<li style="color:red;">Doctor is on Break</li>';
+        return;
+      }
+      servingEl.textContent = queues[doctorId][currentServing[doctorId]]?.token || "None";
+      let listHTML = "";
+      for (let i = currentServing[doctorId]; i < queues[doctorId].length; i++) {
+        listHTML += `<li>${queues[doctorId][i].token} - ${queues[doctorId][i].name} (${queues[doctorId][i].age})</li>`;
+      }
+      listEl.innerHTML = listHTML;
+    }
+
+    function loginDoctor() {
+      const user = document.getElementById("doctor-user").value.trim();
+      const pass = document.getElementById("doctor-pass").value.trim();
+      const doctor = doctors.find((d) => d.username === user && d.password === pass);
+      if (doctor) {
+        loggedInDoctor = doctor.username;
+        document.getElementById("doctor-login-error").textContent = "";
+        document.getElementById("doctor-login").classList.add("hidden");
+        document.getElementById("doctor-dashboard").classList.remove("hidden");
+        renderDoctorQueue();
+      } else {
+        document.getElementById("doctor-login-error").textContent = "Invalid Username or Password";
+      }
+    }
+
+    function logoutDoctor() {
+      loggedInDoctor = null;
+      document.getElementById("doctor-user").value = "";
+      document.getElementById("doctor-pass").value = "";
+      document.getElementById("doctor-dashboard").classList.add("hidden");
+      document.getElementById("doctor-login").classList.remove("hidden");
+    }
+
+    function renderDoctorQueue() {
+      if (!loggedInDoctor) return;
+      document.getElementById("doctor-serving").textContent = doctorStatus[loggedInDoctor]
+        ? queues[loggedInDoctor][currentServing[loggedInDoctor]]?.token || "None"
+        : "On Break";
+      let listHTML = "";
+      if (doctorStatus[loggedInDoctor]) {
+        for (let i = currentServing[loggedInDoctor]; i < queues[loggedInDoctor].length; i++) {
+          listHTML += `<li>${queues[loggedInDoctor][i].token} - ${queues[loggedInDoctor][i].name}</li>`;
+        }
+      } else {
+        listHTML = '<li style="color:red;">Doctor is on Break</li>';
+      }
+      document.getElementById("doctor-list").innerHTML = listHTML;
+    }
+
+    function renderPublicServing() {
+      let serving = "None";
+      for (let doc of doctors) {
+        if (doctorStatus[doc.username] && currentServing[doc.username] < queues[doc.username].length) {
+          serving = queues[doc.username][currentServing[doc.username]]?.token;
+          break;
+        }
+      }
+      const el = document.getElementById("public-serving");
+      if (el) el.textContent = serving;
+    }
+
+    function showStatus() {
+      const token = document.getElementById("myToken").value.trim().toUpperCase();
+      if (!token) return;
+      let found = false;
+      for (let doc of doctors) {
+        const index = queues[doc.username].findIndex((p) => p.token === token);
+        if (index !== -1) {
+          found = true;
+          const pos = index - currentServing[doc.username];
+          document.getElementById("info").textContent =
+            pos >= 0 ? `Your position with ${doc.name}: ${pos}` : "Already served";
+          break;
+        }
+      }
+      if (!found) document.getElementById("info").textContent = "Token not found";
+    }
+
+    function showSection(id) {
+      document.querySelectorAll(".card").forEach((c) => c.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+
+      // Toggle visibility of specialties and doctors info only on home page
+      const specialties = document.getElementById("specialties");
+      const doctorsInfo = document.getElementById("doctors-info");
+      if (id === "home") {
+        specialties.style.display = "flex";
+        doctorsInfo.style.display = "block";
+      } else {
+        specialties.style.display = "none";
+        doctorsInfo.style.display = "none";
+      }
+
+      if (id === "doctor") renderDoctorQueue();
+      if (id === "public" || id === "queue") renderPublicServing();
+      if (id === "home") activateSlider();
+      if (id === "reception" && receptionLoggedIn) doctors.forEach((d) => renderQueue(d.username));
+    }
+
+    const slides = document.querySelectorAll(".slide-image");
+    let currentSlide = 0;
+    function activateSlider() {
+      if (slides.length === 0) return;
+      slides.forEach((s) => s.classList.remove("active"));
+      slides[currentSlide].classList.add("active");
+      setInterval(() => {
+        slides[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add("active");
+      }, 3000);
+    }
+
+    // Update dashboard queues every second
+    setInterval(() => {
+      if (receptionLoggedIn) {
+        doctors.forEach((d) => renderQueue(d.username));
+      }
+      renderDoctorQueue();
+      renderPublicServing();
+    }, 1000);
+
+    window.onload = function () {
+      showSection("home");
+      activateSlider();
+    };
+  </script>
+</body>
+</html>
+
+
