@@ -5,6 +5,7 @@
   <title>Hospital Queue Management System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* Existing CSS styles here exactly as you provided */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(120deg, #d0f2f4 0%, #ffffff 100%);
@@ -102,6 +103,15 @@
       margin: 0.2rem 0;
       padding: 0.5rem;
       border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    li button {
+      padding: 3px 7px;
+      font-size: 1rem;
+      margin-right: 0;
+      width: auto;
     }
     .status-bar {
       background: #beddf4;
@@ -122,7 +132,7 @@
       margin-left: auto;
       margin-right: auto;
       border-radius: 12px;
-      height: 350px;
+      height: auto;
       padding: 0;
     }
     #image-slider {
@@ -210,59 +220,33 @@
 <body>
   <div class="header">Hospital Queue Management System</div>
   <div class="navbar">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png"
-      alt="Hospital Logo"
-    />
+    <img src="c:\Users\DELL\OneDrive\Documents\logo.jpg" alt="Hospital Logo"/>
     <button onclick="showSection('home')">Home</button>
     <button onclick="showSection('reception')">Reception Login</button>
     <button onclick="showSection('doctor')">Doctor</button>
     <button onclick="showSection('public')">Patient Login</button>
-    <button onclick="showSection('queue')">Queue Check</button>
   </div>
   <div class="container">
-    <!-- Homepage Content -->
     <div id="home" class="card">
       <div id="image-slider">
-        <img
-          src="images-1.jpeg"
-          class="slide-image active"
-          alt="Hospital Image 1"
-        />
-        <img
-          src="https://images.unsplash.com/photo-1519494026892-80bbd5a70d37?auto=format&fit=crop&w=800&q=80"
-          class="slide-image"
-          alt="Hospital Image 2"
-        />
-        <img
-          src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=800&q=80"
-          class="slide-image"
-          alt="Hospital Image 3"
-        />
+       <img src="c:\Users\DELL\Downloads\dcotor-checking.jpg" class="slide-image active" alt="Hospital Image 1"/>
+        <img src="c:\Users\DELL\Downloads\jair-lazaro-0lrJo37r6Nk-unsplash.jpg" class="slide-image" alt="Hospital Image 2"/>
+        <img src="c:\Users\DELL\Downloads\indian-general.jpg" class="slide-image" alt="Hospital Image 3"/>      </div>
+      <div id="specialties">
+        <div class="specialty">24/7 Emergency</div>
+        <div class="specialty">Specialized Doctors</div>
+        <div class="specialty">Advanced Equipment</div>
+      </div>
+      <div id="doctors-info">
+        <h3>Our Doctors & Availability</h3>
+        <ul>
+          <li><strong>Dr. Alice Smith</strong> - Cardiologist - 9am to 5pm</li>
+          <li><strong>Dr. John Doe</strong> - Neurologist - 10am to 6pm</li>
+          <li><strong>Dr. Emma Johnson</strong> - Pediatrician - 8am to 4pm</li>
+          <li><strong>Dr. Michael Williams</strong> - Orthopedic - 11am to 7pm</li>
+        </ul>
       </div>
     </div>
-    <div id="specialties">
-      <div class="specialty">24/7 Emergency</div>
-      <div class="specialty">Specialized Doctors</div>
-      <div class="specialty">Advanced Equipment</div>
-    </div>
-    <div id="doctors-info">
-      <h3>Our Doctors & Availability</h3>
-      <ul>
-        <li>
-          <strong>Dr. Alice Smith</strong> - Cardiologist - 9am to 5pm
-        </li>
-        <li><strong>Dr. John Doe</strong> - Neurologist - 10am to 6pm</li>
-        <li>
-          <strong>Dr. Emma Johnson</strong> - Pediatrician - 8am to 4pm
-        </li>
-        <li>
-          <strong>Dr. Michael Williams</strong> - Orthopedic - 11am to 7pm
-        </li>
-      </ul>
-    </div>
-
-    <!-- Reception Dashboard -->
     <div id="reception" class="card hidden">
       <div id="login-card">
         <h3>Reception Login</h3>
@@ -277,8 +261,6 @@
         <button onclick="logoutReception()">Logout</button>
       </div>
     </div>
-
-    <!-- Doctor Login & Dashboard -->
     <div id="doctor" class="card hidden">
       <div id="doctor-login">
         <h3>Doctor Login</h3>
@@ -289,28 +271,18 @@
       </div>
       <div id="doctor-dashboard" class="hidden">
         <h3>Doctor's Live Queue</h3>
-        <div class="status-bar">
-          Now Serving: <span id="doctor-serving"></span>
-        </div>
+        <div class="status-bar">Now Serving: <span id="doctor-serving"></span></div>
         <ul id="doctor-list"></ul>
         <button onclick="logoutDoctor()">Logout</button>
       </div>
     </div>
-
-    <!-- Patient/Public Section -->
     <div id="public" class="card hidden">
       <h3>Patient Login & Queue Info</h3>
       <input id="myToken" placeholder="Enter Your Token (e.g. DRALICEP001)" />
       <button onclick="showStatus()">Check Status</button>
       <div id="info"></div>
     </div>
-
-    <!-- Queue Check -->
-    <div id="queue" class="card hidden">
-      <h3>Now Serving: <span id="public-serving"></span></h3>
-    </div>
   </div>
-
   <script>
     const doctors = [
       { username: "dralice", password: "alice123", name: "Dr. Alice Smith" },
@@ -320,17 +292,14 @@
     ];
     const validReceptionUser = { username: "reception", password: "pass123" };
 
-    let queues = {},
-      currentServing = {},
-      doctorStatus = {};
+    let queues = {}, currentServing = {}, doctorStatus = {};
     doctors.forEach((doc) => {
       queues[doc.username] = [];
       currentServing[doc.username] = 0;
       doctorStatus[doc.username] = true;
     });
 
-    let receptionLoggedIn = false,
-      loggedInDoctor = null;
+    let receptionLoggedIn = false, loggedInDoctor = null;
 
     function generateDoctorBoxes() {
       const container = document.querySelector(".doctor-containers");
@@ -343,7 +312,7 @@
             <input id="page-${doc.username}" type="number" placeholder="Age" />
             <button onclick="addPatient('${doc.username}')">Add Patient</button>
             <div class="status-bar">Now Serving: <span id="serving-${doc.username}"></span></div>
-            <button onclick="nextPatient('${doc.username}')">Next</button>
+            <button onclick="nextPatient('${doc.username}')">➡️</button>
             <button onclick="toggleBreak('${doc.username}')" id="break-${doc.username}">Stop Serving</button>
             <div class="break-status" id="break-status-${doc.username}"></div>
             <ul id="patients-list-${doc.username}"></ul>
@@ -409,6 +378,16 @@
       renderQueue(doctorId);
     }
 
+    function deletePatient(doctorId, index) {
+      queues[doctorId].splice(index, 1);
+      if (currentServing[doctorId] > index) {
+        currentServing[doctorId]--;
+      } else if (currentServing[doctorId] >= queues[doctorId].length) {
+        currentServing[doctorId] = queues[doctorId].length - 1;
+      }
+      renderQueue(doctorId);
+    }
+
     function renderQueue(doctorId) {
       const servingEl = document.getElementById("serving-" + doctorId);
       const listEl = document.getElementById("patients-list-" + doctorId);
@@ -420,7 +399,12 @@
       servingEl.textContent = queues[doctorId][currentServing[doctorId]]?.token || "None";
       let listHTML = "";
       for (let i = currentServing[doctorId]; i < queues[doctorId].length; i++) {
-        listHTML += `<li>${queues[doctorId][i].token} - ${queues[doctorId][i].name} (${queues[doctorId][i].age})</li>`;
+        listHTML += `<li>
+          <button onclick="movePatient('${doctorId}', ${i}, -1)">⬆️</button>
+          <button onclick="movePatient('${doctorId}', ${i}, 1)">⬇️</button>
+          <span>${queues[doctorId][i].token}</span> - ${queues[doctorId][i].name} (${queues[doctorId][i].age})
+          <button onclick="deletePatient('${doctorId}', ${i})" style="margin-left: 10px; color: red;">🗑️</button>
+        </li>`;
       }
       listEl.innerHTML = listHTML;
     }
@@ -434,9 +418,9 @@
         document.getElementById("doctor-login-error").textContent = "";
         document.getElementById("doctor-login").classList.add("hidden");
         document.getElementById("doctor-dashboard").classList.remove("hidden");
-        renderDoctorQueue();
+        renderDoctorDashboard();
       } else {
-        document.getElementById("doctor-login-error").textContent = "Invalid Username or Password";
+        document.getElementById("doctor-login-error").textContent = "Invalid Login";
       }
     }
 
@@ -448,100 +432,71 @@
       document.getElementById("doctor-login").classList.remove("hidden");
     }
 
-    function renderDoctorQueue() {
+    function renderDoctorDashboard() {
       if (!loggedInDoctor) return;
-      document.getElementById("doctor-serving").textContent = doctorStatus[loggedInDoctor]
-        ? queues[loggedInDoctor][currentServing[loggedInDoctor]]?.token || "None"
-        : "On Break";
+      const servingEl = document.getElementById("doctor-serving");
+      const listEl = document.getElementById("doctor-list");
+      if (!doctorStatus[loggedInDoctor]) {
+        servingEl.textContent = "On Break";
+        listEl.innerHTML = '<li style="color:red;">Doctor is on Break</li>';
+        return;
+      }
+      servingEl.textContent = queues[loggedInDoctor][currentServing[loggedInDoctor]]?.token || "None";
       let listHTML = "";
-      if (doctorStatus[loggedInDoctor]) {
-        for (let i = currentServing[loggedInDoctor]; i < queues[loggedInDoctor].length; i++) {
-          listHTML += `<li>${queues[loggedInDoctor][i].token} - ${queues[loggedInDoctor][i].name}</li>`;
-        }
-      } else {
-        listHTML = '<li style="color:red;">Doctor is on Break</li>';
+      for (let i = currentServing[loggedInDoctor]; i < queues[loggedInDoctor].length; i++) {
+        listHTML += `<li>${queues[loggedInDoctor][i].token} - ${queues[loggedInDoctor][i].name} (${queues[loggedInDoctor][i].age})</li>`;
       }
-      document.getElementById("doctor-list").innerHTML = listHTML;
-    }
-
-    function renderPublicServing() {
-      let serving = "None";
-      for (let doc of doctors) {
-        if (doctorStatus[doc.username] && currentServing[doc.username] < queues[doc.username].length) {
-          serving = queues[doc.username][currentServing[doc.username]]?.token;
-          break;
-        }
-      }
-      const el = document.getElementById("public-serving");
-      if (el) el.textContent = serving;
+      listEl.innerHTML = listHTML;
     }
 
     function showStatus() {
-      const token = document.getElementById("myToken").value.trim().toUpperCase();
-      if (!token) return;
+      const token = document.getElementById("myToken").value.trim();
       let found = false;
-      for (let doc of doctors) {
-        const index = queues[doc.username].findIndex((p) => p.token === token);
-        if (index !== -1) {
-          found = true;
-          const pos = index - currentServing[doc.username];
-          document.getElementById("info").textContent =
-            pos >= 0 ? `Your position with ${doc.name}: ${pos}` : "Already served";
-          break;
-        }
-      }
-      if (!found) document.getElementById("info").textContent = "Token not found";
+      doctors.forEach((doc) => {
+        const q = queues[doc.username];
+        q.forEach((p, index) => {
+          if (p.token === token) {
+            found = true;
+            const ahead = index - currentServing[doc.username];
+            document.getElementById("info").innerHTML = `
+              Doctor: ${doc.name}<br>
+              Token: ${p.token}<br>
+              Name: ${p.name}<br>
+              Position in Queue: ${ahead > 0 ? ahead + " ahead" : "Now Serving"}
+            `;
+          }
+        });
+      });
+      if (!found) document.getElementById("info").textContent = "Invalid Token";
     }
 
     function showSection(id) {
-      document.querySelectorAll(".card").forEach((c) => c.classList.add("hidden"));
+      document.querySelectorAll(".card").forEach(c => c.classList.add("hidden"));
       document.getElementById(id).classList.remove("hidden");
-
-      // Toggle visibility of specialties and doctors info only on home page
-      const specialties = document.getElementById("specialties");
-      const doctorsInfo = document.getElementById("doctors-info");
-      if (id === "home") {
-        specialties.style.display = "flex";
-        doctorsInfo.style.display = "block";
-      } else {
-        specialties.style.display = "none";
-        doctorsInfo.style.display = "none";
-      }
-
-      if (id === "doctor") renderDoctorQueue();
-      if (id === "public" || id === "queue") renderPublicServing();
-      if (id === "home") activateSlider();
-      if (id === "reception" && receptionLoggedIn) doctors.forEach((d) => renderQueue(d.username));
     }
 
-    const slides = document.querySelectorAll(".slide-image");
+    function movePatient(doctorId, index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < currentServing[doctorId] || newIndex >= queues[doctorId].length) return;
+      const [patient] = queues[doctorId].splice(index, 1);
+      queues[doctorId].splice(newIndex, 0, patient);
+      renderQueue(doctorId);
+    }
+
     let currentSlide = 0;
-    function activateSlider() {
-      if (slides.length === 0) return;
-      slides.forEach((s) => s.classList.remove("active"));
-      slides[currentSlide].classList.add("active");
-      setInterval(() => {
-        slides[currentSlide].classList.remove("active");
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add("active");
-      }, 3000);
-    }
-
-    // Update dashboard queues every second
+    const slides = document.querySelectorAll(".slide-image");
     setInterval(() => {
-      if (receptionLoggedIn) {
-        doctors.forEach((d) => renderQueue(d.username));
-      }
-      renderDoctorQueue();
-      renderPublicServing();
-    }, 1000);
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 3000);
 
-    window.onload = function () {
-      showSection("home");
-      activateSlider();
-    };
+    setInterval(() => {
+      doctors.forEach((d) => {
+        renderQueue(d.username);
+      });
+      if (loggedInDoctor) renderDoctorDashboard();
+    }, 1000);
   </script>
 </body>
 </html>
-
-
